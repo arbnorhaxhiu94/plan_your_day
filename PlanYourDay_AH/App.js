@@ -1,112 +1,70 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import React, {Component} from "react"
+import { SafeAreaView, View, Text, StatusBar } from "react-native"
+import { connect } from "react-redux"
+import { setUserId } from "./src/globals/set_get_user_id"
+import { myplanscalendar } from "./src/mockdata/myplanscalendar"
+import MyPlansStack from "./src/navigation/MyPlansStack"
+import { getMyPlans } from "./src/redux/reducers/MyPlansReducer"
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+class App extends Component {
+  constructor(props) {
+    super(props)
+  }
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  setPlans = async() => {
+    await AsyncStorage.setItem('my_plans', JSON.stringify(myplanscalendar))
+    this.props.getMyPlans()
+  }
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+  setUserID = async() => {
+    let random_number = Math.random()*10
+    let user_id = 'user_id_'+random_number.toString()
+    console.log(user_id)
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+    let user = await AsyncStorage.getItem('user_id')
+    if (!user) {
+      console.log('User does not exist = '+user)
+      await AsyncStorage.setItem('user_id', user_id)
+        .then(() => {
+          console.log('Setting user id')
+          setUserId(user_id)
+        })
+        .catch((e) => console.log(e))
+    } else {
+      setUserId(user)
+      console.log('User exists = '+user)
+    }
+  } 
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  componentDidMount() {
+    this.setUserID()
+    this.setPlans()
+  }
 
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+  render() {
+    return(
+      <SafeAreaView style={{flex:1, backgroundColor: '#fff', paddingHorizontal: 5}}>
+        <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} />
+        <MyPlansStack />
+      </SafeAreaView>
+    )
+  }
+}
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+const mapStateToProps = (state) => {
+  return {
 
-export default App;
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getMyPlans: () => dispatch(getMyPlans())
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+) (App)

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "816280144172",
+    "project_id": "planyourday-ah",
+    "storage_bucket": "planyourday-ah.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:816280144172:android:c19f04a3175ad1404f8489",
+        "android_client_info": {
+          "package_name": "com.planyourday_ah"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "816280144172-1ii7vmkaicm1k2hd88t5cpqjmsvcuu0f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLSFPDQI6z9L-7ZgXNP5wQH6hhQVzabwM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "816280144172-1ii7vmkaicm1k2hd88t5cpqjmsvcuu0f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
