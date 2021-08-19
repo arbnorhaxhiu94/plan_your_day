@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { View, Text, Button, ActivityIndicator } from 'react-native'
+import { View, Text, Button, ActivityIndicator, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import ErrorMessage from '../components/ErrorMessage'
 import Header from '../components/Header'
@@ -7,7 +7,6 @@ import MyButton from '../components/MyButton'
 import MyPlanCalendar from '../components/MyPlansCalendar'
 import MyTasksList from '../components/MyTasksList'
 import { orange_color } from '../globals/colors'
-import { myplanscalendar } from '../mockdata/myplanscalendar'
 import { editPlan } from '../redux/reducers/EditPlanReducer'
 
 class MainScreen extends Component {
@@ -60,25 +59,35 @@ class MainScreen extends Component {
     }
 
     render() {
+
+        const styles = StyleSheet.create({
+            title: {
+                fontSize: 20,
+                color: '#555',
+                paddingLeft: 10
+            },
+        })
+
         return (
             <View style={{flex: 1, backgroundColor: '#fff'}}>
                 <Header 
-                    title={'Day planner'} 
+                    title={'Plan your day'} 
                     screen={'Main'}
-                    navigation={this.props.navigation} />
-                {/* <Button onPress={() => this.props.navigation.navigate('MyPlanScreen', {title: 'Hello'})} title={'My plan'}/> */}
+                    navigation={this.props.navigation}
+                    goToMenu={() => this.props.navigation.navigate('MenuScreen')} />
                 {this.props.loading ? 
                 <View style={{flex: 1, justifyContent: 'center'}}>
                     <ActivityIndicator size={25} color={orange_color} />
                 </View>
                 : this.props.data?.length == 0 ?
-                <View style={{flex: 1}}>
+                <View style={{flex: 1, paddingVertical: 20}}>
                     <ErrorMessage 
                         color={'orange'}
                         error_msg={'You have no plans.'} />
                 </View>
                 : this.props.data ?
-                <View>
+                <View style={{marginTop: 15}}>
+                    <Text style={styles.title}>Calendar</Text>
                     <MyPlanCalendar 
                         data={this.props.data}
                         selectItem={this.selectItem} />

@@ -20,7 +20,7 @@ export const EditPlanReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                success: action.data
+                success: action.success
             }
         case 'EDIT_PLAN_ERROR':
             return {

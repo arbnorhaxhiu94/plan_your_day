@@ -6,6 +6,7 @@ import { setUserId } from "./src/globals/set_get_user_id"
 import { myplanscalendar } from "./src/mockdata/myplanscalendar"
 import MyPlansStack from "./src/navigation/MyPlansStack"
 import { getMyPlans } from "./src/redux/reducers/MyPlansReducer"
+import SplashScreen from 'react-native-splash-screen'
 
 class App extends Component {
   constructor(props) {
@@ -37,9 +38,21 @@ class App extends Component {
     }
   } 
 
+  setNotifications = async() => {
+    await AsyncStorage.getItem('notifications')
+     .then(async(data) => {
+      //  alert(data)
+       if (data==null) {
+        await AsyncStorage.setItem('notifications', 'true')
+       }
+     })
+  }
+
   componentDidMount() {
     this.setUserID()
     this.setPlans()
+    this.setNotifications()
+    SplashScreen.hide()
   }
 
   render() {

@@ -10,6 +10,7 @@ import { user_id } from '../globals/set_get_user_id'
 import { connect } from 'react-redux'
 import { getMyPlans } from '../redux/reducers/MyPlansReducer'
 import { editPlan } from '../redux/reducers/EditPlanReducer'
+import PushNotification from 'react-native-push-notification'
 
 class MyPlanScreen extends Component {
     constructor(props) {
@@ -56,21 +57,40 @@ class MyPlanScreen extends Component {
         })
     }
 
-    deleteTask = () => {
-        // alert(user_id+''+this.props?.route?.params?.date)
+    deleteTask = async() => {
+        let tasks = this.props.route?.params?.tasks
+
+        // alert(tasks)
         // return
-        firestore()
-            .collection('plans')
-            .doc(user_id+this.props?.route?.params?.date)
-            .delete()
-            .then(() => {
-                this.props.getMyPlans()
-                setTimeout(() => {
-                    this.props.navigation.goBack()
-                }, 2000);
-                alert('Task deleted successfully.');
-            })
-            .catch((e) => alert(e))
+        if (tasks.length == 1) {
+            firestore()
+                .collection('plans')
+                .doc(user_id+this.props?.route?.params?.date)
+                .delete()
+                .then(() => {
+                    this.props.getMyPlans()
+                    setTimeout(() => {
+                        this.props.navigation.goBack()
+                    }, 2000);
+                    PushNotification.deleteChannel(this.props?.route?.params?.task?.title)
+                    PushNotification.cancelLocalNotifications({id: this.props?.route?.params?.task?.title})
+                    alert('Task deleted successfully.');
+                })
+                .catch((e) => alert(e))
+        } else {
+            let index = tasks.indexOf(this.props.route?.params?.task)
+            tasks.splice(index, 1)
+            await this.props.editPlan(this.props.route?.params?.date, tasks)
+            if (this.props.success) {
+                alert('Task deleted successfully.')
+            } else if (this.props.error) {
+                alert(this.props.error)
+            }
+            this.props.getMyPlans()
+            setTimeout(() => {
+                this.props.navigation.goBack()
+            }, 2000);
+        }
     }
 
     saveChanges = async() => {

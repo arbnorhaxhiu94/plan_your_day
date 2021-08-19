@@ -1193,6 +1193,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-12.5.0.tgz#e10d140a41e89348f742c6e1034041ac3896b1a0"
   integrity sha512-fW4qUZWO3cCs0wfzkPqfntfWY5X86UKq1Fq0F2Pw1raop6du6NlN0XSCtyO9BCU5xn/H5sDCpn+5lvKqTRlhAg==
 
+"@react-native-firebase/messaging@^12.6.0":
+  version "12.6.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-12.6.0.tgz#31f4337844ccdb40823c9b214d4d62fd26c5b4dd"
+  integrity sha512-gGwcUkzlg3jW0qLQGGlVy4wav64eFGTz9Cr5ObjenXDsivIvrPkQnMA9IxiaC71KKvo3A4dS2saH+kUcCFThTw==
+
 "@react-native/assets@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@react-native/assets/-/assets-1.0.0.tgz#c6f9bf63d274bafc8e970628de24986b30a55c8e"
@@ -5506,6 +5511,11 @@ react-native-codegen@^0.0.6:
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
 
+react-native-push-notification@^7.4.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-7.4.0.tgz#81192356eddfee8eeaf72a9a696c7c90bf5b0ece"
+  integrity sha512-Ac3Ep71e2D8Q/Vy0OHBAO5JwhsFsNSuf9knkpXQWS0B9488nIZJLEMuTpF8610xPvGw7XxVrL/q0oZO5F1pOzw==
+
 react-native-safe-area-context@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.3.0.tgz#6e0b45baa031589ec9c54f8359ace166a36aa5e5"
@@ -5517,6 +5527,11 @@ react-native-screens@^3.5.0:
   integrity sha512-xew4x0YX0RaDduNYM4gZXkphPwGZIbbu9fTU85xOtT1tOUPm3OU4pFMiN6PF54haMCsaMQRvdOXvLicUVRiptA==
   dependencies:
     warn-once "^0.1.0"
+
+react-native-splash-screen@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-splash-screen/-/react-native-splash-screen-3.2.0.tgz#d47ec8557b1ba988ee3ea98d01463081b60fff45"
+  integrity sha512-Ls9qiNZzW/OLFoI25wfjjAcrf2DZ975hn2vr6U9gyuxi2nooVbzQeFoQS5vQcbCt9QX5NY8ASEEAtlLdIa6KVg==
 
 react-native-vector-icons@^8.1.0:
   version "8.1.0"

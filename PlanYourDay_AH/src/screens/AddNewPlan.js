@@ -10,6 +10,9 @@ import { addNewPlan } from '../redux/reducers/AddNewPlanReducer'
 import { connect } from 'react-redux'
 import { getMyPlans } from '../redux/reducers/MyPlansReducer'
 
+import PushNotification, {Importance} from "react-native-push-notification";
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 class AddNewPlanScreen extends Component {
     constructor(props) {
         super(props)
@@ -21,8 +24,75 @@ class AddNewPlanScreen extends Component {
             date: new Date(),
             date_1: null,
             date_error: '',
-            showDatePicker: false
+            showDatePicker: false,
+            mode: null
         }
+        PushNotification.configure({
+            onNotification: function (notification) {
+              console.log("NOTIFICATION:", notification);
+            },
+          
+            onAction: function (notification) {
+              console.log("ACTION:", notification.action);
+              console.log("NOTIFICATION:", notification);          
+            },
+
+            popInitialNotification: true,
+          
+            requestPermissions: true,
+        })
+    }
+
+    createChannel = (channel_id, message) => {
+
+        PushNotification.createChannel(
+            {
+              channelId: channel_id, // (required)
+              channelName: "My channel", // (required)
+              channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
+              playSound: false, // (optional) default: true
+              soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+              importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+              vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+            },
+            (created) => { 
+                console.log(`createChannel returned '${created}'`)
+                setTimeout(() => {
+                    this.notify(channel_id, message)
+                }, 1000);
+            } // (optional) callback returns whether the channel was created, false means it already existed.
+        );            
+    }
+
+    notify = (channel_id, message) => {
+
+        let date = this.state.date
+        let hour = new Date(date).getHours()
+        let x = date.setHours(hour - 1, 0, 0)
+        let date_1 = new Date(x)
+
+        PushNotification.localNotificationSchedule({
+            id: channel_id,
+            channelId: channel_id,
+            vibration: 300,
+            title: message, // (optional)
+            message: 'This task has only 1 hour left. Did you complete it?', // (required)
+            date: date_1 // in 60 secs
+        }); 
+        
+        // PushNotification.localNotification({
+        //     channelId: channel_id,
+        //     vibration: 300,
+        //     title: message, // (optional)
+        //     message: 'This task has only 1 hour left. Did you complete it?',
+        // })
+    }
+
+    showDateTimePicker = (mode) => {
+        this.setState({
+            mode: mode,
+            showDatePicker: true
+        })
     }
 
     addTask = async() => {
@@ -71,11 +141,19 @@ class AddNewPlanScreen extends Component {
 
         await this.props.addNewPlan(this.state.date_1, tasks)
 
-        if (this.props.data) {
-            // alert('New Plan Added')
+        if (this.props.success) {
+            alert('New Plan Added')
+            await AsyncStorage.getItem('notifications')
+                .then((data) => {
+                    if (data == 'true') {
+                        this.createChannel(this.state.title, this.state.title)
+                    }
+                })
             setTimeout(() => {
                 this.props.navigation.goBack()
             }, 2000);
+        } else if (this.props.error) {
+            alert(this.props.error)
         }
     }
 
@@ -94,18 +172,28 @@ class AddNewPlanScreen extends Component {
     }
 
     onDateChange = (event, selectedDate) => {
-        const currentDate = selectedDate || this.state.date
-        // alert(currentDate)
-        let date_1 = currentDate.toString().split(' ')
 
-        let date = date_1[0]+' '+date_1[1]+' '+date_1[2]+' '+date_1[3]
-        // alert(date)
+        let date = null
+
+        if (this.state.mode == 'time') {
+            let time = selectedDate.getTime()
+            let x = new Date(this.state.date).setTime(time)
+            date = new Date(x)
+        } else {
+            let hour = new Date(this.state.date).getHours()
+            let x = selectedDate.setHours(hour, 0, 0)
+            date = new Date(x)
+        }
+
+        let date_split = selectedDate.toString().split(' ')
+        let date_1 = date_split[0]+' '+date_split[1]+' '+date_split[2]+' '+date_split[3]
+
         this.setState({
-            date_1: date,
-            date: currentDate,
+            date_1: date_1,
+            date: date,
             showDatePicker: false,
             date_error: ''
-        })
+        })        
     }
 
     componentWillUnmount() {
@@ -142,7 +230,7 @@ class AddNewPlanScreen extends Component {
                 <SelectDateButton 
                     backgroundColor={orange_color}
                     date={this.state.date.toLocaleDateString()}
-                    showDatePicker={() => this.setState({showDatePicker: true})} />
+                    showDatePicker={this.showDateTimePicker} />
                 {this.state.date_error !== '' ? 
                     <ErrorMessage error_msg={this.state.date_error} color={orange_color} /> :null}
                 <TextInput 
@@ -168,7 +256,7 @@ class AddNewPlanScreen extends Component {
                 <DateTimePicker
                     testID="dateTimePicker"
                     value={this.state.date}
-                    mode={'date'}
+                    mode={this.state.mode}
                     is24Hour={true}
                     minimumDate={new Date()}
                     display="default"
@@ -190,7 +278,7 @@ class AddNewPlanScreen extends Component {
 const mapStateToProps = (state) => {
     return {
         loading: state.addNewPlanReducer.loading,
-        data1: state.addNewPlanReducer.data,
+        success: state.addNewPlanReducer.success,
         data: state.getMyPlansReducer.data,
         error: state.addNewPlanReducer.error,
     }

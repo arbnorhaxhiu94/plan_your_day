@@ -15,7 +15,10 @@ export default class Header extends Component {
             container: {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                alignItems: 'center'
+                alignItems: 'center',
+                backgroundColor: '#fff',
+                elevation: 10,
+                // borderBottomWidth: 1
             },
             title: {
                 fontSize: 20,
@@ -40,10 +43,12 @@ export default class Header extends Component {
             <View style={styles.container}>
                 <Text style={styles.title}>{this.props.title}</Text>
                 <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity style={styles.button}>
+                    {/* <TouchableOpacity style={styles.button}>
                         <IonIcons name='notifications-outline' size={25} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
+                    </TouchableOpacity> */}
+                    <TouchableOpacity 
+                        style={styles.button}
+                        onPress={() => this.props.goToMenu()} >
                         <Entypo name='menu' size={25} />
                     </TouchableOpacity>
                 </View>

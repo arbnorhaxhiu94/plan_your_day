@@ -20,7 +20,7 @@ export const AddNewPlanReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                success: action.data
+                success: action.success
             }
         case 'ADD_NEW_PLAN_ERROR':
             return {

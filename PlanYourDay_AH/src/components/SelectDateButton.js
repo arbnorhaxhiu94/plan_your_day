@@ -23,10 +23,16 @@ export default class SelectDateButton extends Component {
                 borderRadius: 10,
                 elevation: 5
             },
+            buttonsContainer: {
+                flexDirection: 'row',
+                // justifyContent: 'center',
+                alignItems: 'center'
+            },
             button: {
                 justifyContent: 'center',
                 alignItems: 'center',
                 width: 40,
+                marginHorizontal: 3,
                 height: 40,
                 borderRadius: 15,
                 backgroundColor: this.props.backgroundColor
@@ -39,11 +45,19 @@ export default class SelectDateButton extends Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.text}>Date: {this.props.date}</Text>
-                <TouchableOpacity 
-                    style={styles.button} 
-                    onPress={() => this.props.showDatePicker()}>
-                    <AntDesign name='calendar' size={26} color={'#fff'} />
-                </TouchableOpacity>
+                <View style={styles.buttonsContainer}>
+                    <TouchableOpacity 
+                        style={styles.button} 
+                        onPress={() => this.props.showDatePicker('date')}>
+                        <AntDesign name='calendar' size={26} color={'#fff'} />
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        style={styles.button} 
+                        onPress={() => this.props.showDatePicker('time')}>
+                        <AntDesign name='clockcircleo' size={26} color={'#fff'} />
+                    </TouchableOpacity>
+                </View>
+               
             </View>
         )
     }

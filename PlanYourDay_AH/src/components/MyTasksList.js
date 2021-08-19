@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native'
+import PushNotification from 'react-native-push-notification'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { orange_color, yellow_color } from '../globals/colors'
 
@@ -20,6 +21,8 @@ export default class MyTasksList extends Component {
             ...item,
             completed: !item.completed,
         }
+        PushNotification.deleteChannel(item.title)
+        PushNotification.cancelLocalNotifications({id: item.title})
 
         console.log(tasks)
         this.props.editTask(tasks)

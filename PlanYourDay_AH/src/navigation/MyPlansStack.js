@@ -4,7 +4,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainScreen from '../screens/MainScreen';
 import MyPlanScreen from '../screens/MyPlanScreen';
 import AddNewPlanScreen from '../screens/AddNewPlan';
-import Header from '../components/Header';
+import MenuScreen from '../screens/MenuScreen';
+import ContactUs from '../screens/ContactUs';
+import PrivacyPolicyScreen from '../screens/PrivacyPolicyScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +22,15 @@ function MyPlansStack() {
                 </Stack.Screen>
                 <Stack.Screen name="AddNewPlanScreen">
                     {props => <AddNewPlanScreen {...props} />}
+                </Stack.Screen>
+                <Stack.Screen name="MenuScreen" >
+                    {props => <MenuScreen {...props} />}
+                </Stack.Screen>
+                <Stack.Screen name="ContactUsScreen" >
+                    {props => <ContactUs {...props} />}
+                </Stack.Screen>
+                <Stack.Screen name="PrivacyPolicyScreen" >
+                    {props => <PrivacyPolicyScreen {...props} />}
                 </Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
